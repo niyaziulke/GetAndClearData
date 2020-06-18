@@ -1,7 +1,5 @@
----
-title: "CodeBook.md"
-output: html_document
----
+
+# Codebook
 
 ## Data
 
@@ -37,4 +35,4 @@ output: html_document
 * Column names of 'complete' are defined. The first column contains Subjects, the second column contains Activities and other 66 columns correspond to the extracted features.
 * aggregate function is then used to find the mean of each variable for each activity and each subject.
 * 'tidyTable' is obtained by ordering the result of aggregate function.
-* Finally, the program prints 'tidyTable to tidy_dataset.txt .
+* Finally, the program prints 'tidyTable' to tidy_dataset.txt .

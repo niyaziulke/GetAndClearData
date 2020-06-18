@@ -1,8 +1,4 @@
----
-title: "Getting and Cleaning Data"
-output: html_document
----
-
+## Getting and Cleaning Data
 
 
 This project uses the data set from: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones#
