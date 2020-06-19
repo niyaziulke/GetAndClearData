@@ -3,44 +3,47 @@
 dataUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 dataZip <- "data.zip"
 
-# if the zip file does not exist, download and unzip it.
+#download and unzip the data if it is needed.
 if(!file.exists(dataZip)){
   download.file(url=dataUrl,destfile = dataZip)
   unzip(dataZip)
 }
 
-# main directory which contains the data.
-dataPath <-  "UCI HAR Dataset"
+
+#read activity labels and feature names.
+activityLabels <- (read.table("UCI HAR Dataset/activity_labels.txt",as.is = TRUE))[,2]
+features <- (read.table("UCI HAR DATASET/features.txt",as.is = TRUE))[,2]
 
 
 # read test and train data, merge them.
-xMerged <- rbind(read.table(paste0 (dataPath,"/train/X_train.txt")),read.table(paste0 (dataPath,"/test/X_test.txt")))
-yMerged <- rbind(read.table(paste0 (dataPath,"/train/y_train.txt")),read.table(paste0 (dataPath,"/test/y_test.txt")))
-subjects <- rbind(read.table(paste0 (dataPath,"/train/subject_train.txt")),read.table(paste0 (dataPath,"/test/subject_test.txt")))
+xMerged <- rbind(read.table("UCI HAR Dataset/train/X_train.txt"),read.table("UCI HAR Dataset/test/X_test.txt"))
+yMerged <- rbind(read.table("UCI HAR Dataset/train/y_train.txt"),read.table("UCI HAR Dataset/test/y_test.txt"))
+subjects <- rbind(read.table("UCI HAR Dataset/train/subject_train.txt"),read.table("UCI HAR Dataset/test/subject_test.txt"))
 
-#read activity label and feature names.
-activityLabels <- (read.table(paste0(dataPath,"/activity_labels.txt"),as.is = TRUE))[,2]
-features <- read.table(paste0(dataPath,"/features.txt"),as.is = TRUE)[,2]
+
 
 #extract only the measurements on the mean and standard deviation.
-selectFeatures <- grep("-(mean|std)\\(\\)", as.character(features))
+selectFeatures <- grep("-(mean|std)\\(\\)", features)
 features <- features[selectFeatures]
 xMerged <- xMerged[,selectFeatures]
 
-#improve variable names.
-features <- gsub("(\\(\\)|-)","",features)
-features <- gsub("mean","Mean",features)
-features <- gsub("std","Std",features)
 
 
-# store descriptive activity names.
+# convert activity IDs to corresponding activity names.
 activities <- sapply(yMerged, function(x) x<- activityLabels[x])
 
+
+#improve feature names.
+features <- gsub("(\\(\\)|-)","",features)
+features <- gsub("mean","Mean",features)
+features <- gsub("std","StandardDeviation",features)
+
+
 #clear a tidy data set by calculating averages of each variable for each activity and each subject.
-complete <- cbind(subjects,activities,xMerged)
-colnames(complete) <- c("Subject","Activity", features)
-complete <- aggregate(. ~ Subject + Activity ,data =complete, FUN=mean)
-tidyTable<- complete[order(match(complete$Activity,activityLabels)),]
+complete <- cbind(activities,subjects,xMerged)
+colnames(complete) <- c("Activity","Subject", features)
+tidyTable <- aggregate(. ~ Activity + Subject ,data =complete, FUN=mean)
+tidyTable<- tidyTable[order(match(tidyTable$Activity,activityLabels)),]
 tidyTable <- tidyTable[order(tidyTable$Subject),]
 
 #print the table.

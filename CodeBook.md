@@ -14,6 +14,8 @@
 
 * Download and unzip the file if it is needed.
 * Read and merge the train and test data.
+* Activity labels are read from the second column of activity_labels.txt and stored in 'activityLabels'.
+* Features are read from the second column of features.txt and stored in 'features'.
 &nbsp;
 &nbsp;
 &nbsp;
@@ -25,14 +27,12 @@
 &nbsp;
 &nbsp;
 
-* Activity labels are read from the second column of activity_labels.txt and stored in 'activityLabels'.
-* Features are read from the second column of features.txt and stored in 'features'.
 * Indices of specific features that contain "-mean()" and "-std() " are found and stored in 'selectFeatures'.
-* Other features and corresponding variables in 'xMerged' are excluded.
-* "()" and "-" parts are deleted from feature names. All "mean" words are converted to "Mean" and all "std" to "Std"
-* 'activities' list is created. This list contains activity names corresponding to activity IDs in 'yMerged'.
-* 'subjects', 'activities' and 'xMerged' are all merged together with cbind. The table is stored in the variable 'complete'
-* Column names of 'complete' are defined. The first column contains Subjects, the second column contains Activities and other 66 columns correspond to the extracted features.
+* Other features in 'features' and corresponding variables in 'xMerged' are excluded.
+* 'activities' list is created. This list contains activity names corresponding to the activity IDs in 'yMerged'.
+* "()" and "-" parts are deleted from feature names. All "mean" words are converted to "Mean" and all "std" to "StandardDeviation"
+* 'activities', 'subjects' and 'xMerged' are all merged together with cbind. The table is stored in the variable 'complete'
+* Column names of 'complete' are defined. The first column contains activities, the second column contains subjects and other 66 columns correspond to the extracted features.
 * aggregate function is then used to find the mean of each variable for each activity and each subject.
 * 'tidyTable' is obtained by ordering the result of aggregate function.
 * Finally, the program prints 'tidyTable' to tidy_dataset.txt .
