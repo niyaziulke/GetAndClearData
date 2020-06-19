@@ -45,7 +45,10 @@ colnames(complete) <- c("Activity","Subject", features)
 tidyTable <- aggregate(. ~ Activity + Subject ,data =complete, FUN=mean)
 tidyTable<- tidyTable[order(match(tidyTable$Activity,activityLabels)),]
 tidyTable <- tidyTable[order(tidyTable$Subject),]
-
+firstCol <- tidyTable[,1]
+tidyTable[,1] <- tidyTable [,2]
+tidyTable[,2] <- firstCol
+colnames(tidyTable) <- c("Subject", "Activity" , features)
 #print the table.
 write.table(tidyTable, "tidy_dataset.txt", row.names = FALSE,col.names = TRUE ,quote = FALSE)
 
